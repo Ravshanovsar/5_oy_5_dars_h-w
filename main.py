@@ -1,15 +1,16 @@
 import psycopg2
+from pprint import pprint
 
 db_name = 'oy_5_dars_5_homework'
 password = 'google_0330'
 host = 'localhost'
 port = 5432
 user = 'postgres'
-conn = psycopg2.connect(dbname = db_name,
-                        user = user,
-                        password = password,
-                        host = host,
-                        port = port)
+conn = psycopg2.connect(dbname=db_name,
+                        user=user,
+                        password=password,
+                        host=host,
+                        port=port)
 cur = conn.cursor()
 
 
@@ -31,16 +32,17 @@ cur = conn.cursor()
 class User():
 
     def show_users():
-        select_from_query = """select * from users"""
+        select_from_query = "select * from users"
         cur.execute(select_from_query)
-        conn.commit()
+        users = cur.fetchall()
+        pprint(users)
 
     def show_user():
         user_id = int(input("User ID --> "))
         select_from_query = f"""select * from users where Id = {user_id}"""
         cur.execute(select_from_query)
-        conn.commit()
-
+        user = cur.fetchall()
+        pprint(user)
     def delete_user():
         user_id = int(input("User ID --> "))
         delete_query = f"""delete from users where id = {user_id}"""
@@ -55,11 +57,11 @@ class User():
         print("5. Phone")
         print("6. Username")
         print("7. Password")
-        ch = int(input(""))
+        ch = int(input("choose one option --> "))
         match ch:
             case 1:
                 user_id = int(input("User ID --> "))
-                new = input("NEW FirstName --> ")
+                new = str(input("NEW FirstName --> "))
                 update_data_query = f"""UPDATE users
                 SET firstName = {new}
                 WHERE id = {user_id};"""
@@ -67,7 +69,7 @@ class User():
                 conn.commit()
             case 2:
                 user_id = int(input("User ID --> "))
-                new = input("NEW LastName --> ")
+                new = str(input("NEW LastName --> "))
                 update_data_query = f"""UPDATE users
                 SET lastName = {new}
                 WHERE id = {user_id};"""
@@ -75,7 +77,7 @@ class User():
                 conn.commit()
             case 3:
                 user_id = int(input("User ID --> "))
-                new = input("NEW Age --> ")
+                new = str(input("NEW Age --> "))
                 update_data_query = f"""UPDATE users
                 SET age = {new}
                 WHERE id = {user_id};"""
@@ -83,7 +85,7 @@ class User():
                 conn.commit()
             case 4:
                 user_id = int(input("User ID --> "))
-                new = input("NEW Gender --> ")
+                new = str(input("NEW Gender --> "))
                 update_data_query = f"""UPDATE users
                 SET gender = {new}
                 WHERE id = {user_id};"""
@@ -91,7 +93,7 @@ class User():
                 conn.commit()
             case 5:
                 user_id = int(input("User ID --> "))
-                new = input("NEW Phone --> ")
+                new = str(input("NEW Phone --> "))
                 update_data_query = f"""UPDATE users
                 SET phone = {new}
                 WHERE id = {user_id};"""
@@ -99,7 +101,7 @@ class User():
                 conn.commit()
             case 6:
                 user_id = int(input("User ID --> "))
-                new = input("NEW Username --> ")
+                new = str(input("NEW Username --> "))
                 update_data_query = f"""UPDATE users
                 SET username = {new}
                 WHERE id = {user_id};"""
@@ -107,7 +109,7 @@ class User():
                 conn.commit()
             case 7:
                 user_id = int(input("User ID --> "))
-                new = input("NEW Password --> ")
+                new = str(input("NEW Password --> "))
                 update_data_query = f"""UPDATE users
                 SET password = {new}
                 WHERE id = {user_id};"""
@@ -115,18 +117,19 @@ class User():
                 conn.commit()
 
     def save():
-        FirstName = input("first_name --> ")
-        LastName = input("lastName --> ")
-        Age = input("age --> ")
-        Gender = input("gender --> ")
-        Phone = input("phone --> ")
-        Username = input("username --> ")
-        Password = input("password --> ")
-
-        insert_into_query = """insert into users(id, firstName, lastName, age, gender, phone, username, password)
-        values (FirstName, LastName, Age, Gender, Phone, Username, Password);"""
-        cur.execute(insert_into_query)
+        FirstName = str(input("first_name --> "))
+        LastName = str(input("lastName --> "))
+        Age = int(input("age --> "))
+        Gender = str(input("gender --> "))
+        Phone = str(input("phone --> "))
+        Username = str(input("username --> "))
+        Password = str(input("password --> "))
+        insert = f"""insert into users(firstName, lastName, age, gender, phone, username, password)
+        values (%s, %s, %s, %s, %s, %s, %s)"""
+        values = (FirstName, LastName, Age, Gender, Phone, Username, Password)
+        cur.execute(insert, values)
         conn.commit()
+
 
 def main_menu():
     print("1. Show Users")
@@ -146,8 +149,6 @@ def main_menu():
             User.update_user()
         case 5:
             User.save()
-
-
 
 
 main_menu()

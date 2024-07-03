@@ -36,6 +36,7 @@ class User():
         cur.execute(select_from_query)
         users = cur.fetchall()
         pprint(users)
+        main_menu()
 
     def show_user():
         user_id = int(input("User ID --> "))
@@ -43,11 +44,13 @@ class User():
         cur.execute(select_from_query)
         user = cur.fetchall()
         pprint(user)
+        main_menu()
     def delete_user():
         user_id = int(input("User ID --> "))
         delete_query = f"""delete from users where id = {user_id}"""
         cur.execute(delete_query)
         conn.commit()
+        main_menu()
 
     def update_user():
         print("1. FirstName")
@@ -57,6 +60,7 @@ class User():
         print("5. Phone")
         print("6. Username")
         print("7. Password")
+        print("8. Main Menu")
         ch = int(input("choose one option --> "))
         match ch:
             case 1:
@@ -67,6 +71,7 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
             case 2:
                 user_id = int(input("User ID --> "))
                 new = str(input("NEW LastName --> "))
@@ -75,6 +80,7 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
             case 3:
                 user_id = int(input("User ID --> "))
                 new = str(input("NEW Age --> "))
@@ -83,6 +89,7 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
             case 4:
                 user_id = int(input("User ID --> "))
                 new = str(input("NEW Gender --> "))
@@ -91,6 +98,7 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
             case 5:
                 user_id = int(input("User ID --> "))
                 new = str(input("NEW Phone --> "))
@@ -99,6 +107,7 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
             case 6:
                 user_id = int(input("User ID --> "))
                 new = str(input("NEW Username --> "))
@@ -107,6 +116,7 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
             case 7:
                 user_id = int(input("User ID --> "))
                 new = str(input("NEW Password --> "))
@@ -115,6 +125,9 @@ class User():
                 WHERE id = {user_id};"""
                 cur.execute(update_data_query)
                 conn.commit()
+                main_menu()
+            case 8:
+                main_menu()
 
     def save():
         FirstName = str(input("first_name --> "))
@@ -129,15 +142,19 @@ class User():
         values = (FirstName, LastName, Age, Gender, Phone, Username, Password)
         cur.execute(insert, values)
         conn.commit()
+        main_menu()
 
 
 def main_menu():
-    print("1. Show Users")
-    print("2. Show User")
-    print("3. Delete User")
-    print("4. Update User")
-    print("5. Save User")
-    c = int(input("choose one option -->"))
+    print("")
+    print(" ---------------- ")
+    print("| 1. Show Users  |")
+    print("| 2. Show User   |")
+    print("| 3. Delete User |")
+    print("| 4. Update User |")
+    print("| 5. Save User   |")
+    print(" ---------------- ")
+    c = int(input("choose one option --> "))
     match c:
         case 1:
             User.show_users()
